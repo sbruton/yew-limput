@@ -10,13 +10,7 @@ use yew_limput::LimitedTextInput;
 #[function_component]
 fn Example() -> Html {
     let filter = Rc::new(|c: &char| c.is_uppercase()) as Rc<LimitedInputFilter>;
-
-    html! {
-        <div>
-            <h1>{ "Uppercase-Only Input Example" }</h1>
-            <LimitedTextInput {filter} max_len={12} />
-        </div>
-    }
+    html! { <LimitedTextInput {filter} max_len={12} /> }
 }
 ```
 
@@ -30,12 +24,6 @@ use yew_limput::LimitedNumericInput;
 
 #[function_component]
 fn Example() -> Html {
-    html! {
-        <div>
-            <h1>{ "Uppercase-Only Input Example" }</h1>
-            <LimitedNumericInput class="totp" max_len={6} />
-        </div>
-    }
+    html! { <LimitedNumericInput class="totp" max_len={6} /> }
 }
-
 ```
