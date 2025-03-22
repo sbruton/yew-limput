@@ -105,12 +105,11 @@ pub struct LimitedNumericInputProps {
 
 #[function_component]
 pub fn LimitedNumericInput(props: &LimitedNumericInputProps) -> Html {
-    let input_type = "text";
     let class = &props.class;
     let filter = Rc::new(|c: &char| c.is_ascii_digit()) as Rc<LimitedInputFilter>;
     let max_len = props.max_len;
 
     html! {
-        <LimitedInput {input_type} {class} {filter} {max_len} />
+        <LimitedTextInput {class} {filter} {max_len} />
     }
 }
