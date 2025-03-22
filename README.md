@@ -6,11 +6,11 @@ __General Text Input Constraints__
 ```rust
 use std::rc::Rc;
 use yew::prelude::*;
-use yew_limput::{LimitedInputFilter, LimitedTextInput};
+use yew_limput::{LimitedTextInput, input_filter};
 
 #[function_component]
 fn Example() -> Html {
-    let filter = Rc::new(|c: &char| c.is_uppercase()) as Rc<LimitedInputFilter>;
+    let filter = input_filter!(|c: &char| c.is_uppercase());
     html! { <LimitedTextInput {filter} max_len={12} /> }
 }
 ```

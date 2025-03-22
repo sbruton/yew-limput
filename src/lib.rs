@@ -7,6 +7,13 @@ use yew::prelude::*;
 
 pub type LimitedInputFilter = dyn for<'a> Fn(&'a char) -> bool;
 
+#[macro_export]
+macro_rules! input_filter {
+    ($filter:expr) => {
+        Rc::new($filter) as Rc<$crate::LimitedInputFilter>
+    };
+}
+
 #[derive(Properties)]
 struct LimitedInputProps {
     input_type: &'static str,

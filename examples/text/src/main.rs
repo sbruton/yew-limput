@@ -1,7 +1,7 @@
 use std::rc::Rc;
 
 use yew::prelude::*;
-use yew_limput::{LimitedInputFilter, LimitedTextInput};
+use yew_limput::{LimitedTextInput, input_filter};
 
 fn main() {
     yew::Renderer::<Example>::new().render();
@@ -9,7 +9,7 @@ fn main() {
 
 #[function_component]
 fn Example() -> Html {
-    let filter = Rc::new(|c: &char| c.is_uppercase()) as Rc<LimitedInputFilter>;
+    let filter = input_filter!(|c: &char| c.is_uppercase());
 
     html! {
         <div>
