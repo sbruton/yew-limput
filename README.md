@@ -26,6 +26,10 @@ use yew_limput::LimitedNumericInput;
 
 #[function_component]
 fn Example() -> Html {
-    html! { <LimitedNumericInput class="totp" max_len={6} /> }
+    let on_max_len = Callback::from(|code: String| {
+        unimplemented!("totp code processing");
+    });
+
+    html! { <LimitedNumericInput class="totp" max_len={6} {on_max_len} /> }
 }
 ```

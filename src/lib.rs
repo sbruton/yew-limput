@@ -20,6 +20,7 @@ struct LimitedInputProps {
     class: AttrValue,
     filter: Rc<LimitedInputFilter>,
     max_len: Option<usize>,
+    on_max_len: Callback<String>,
 }
 
 impl PartialEq for LimitedInputProps {
@@ -35,7 +36,9 @@ impl PartialEq for LimitedInputProps {
 fn LimitedInput(props: &LimitedInputProps) -> Html {
     let oninput = {
         let filter = props.filter.clone();
-        let max_len = props.max_len;
+        let max_len = props.max_len.unwrap_or(usize::MAX);
+        let on_max_len = props.on_max_len.clone();
+
         move |event: InputEvent| {
             let Some(target) = event.target() else {
                 error!("input event has no target");
@@ -52,10 +55,14 @@ fn LimitedInput(props: &LimitedInputProps) -> Html {
             let filtered_value: String = value
                 .chars()
                 .filter(|c| (filter)(c))
-                .take(max_len.unwrap_or(usize::MAX))
+                .take(max_len)
                 .collect();
 
             input.set_value(&filtered_value);
+
+            if filtered_value.len() >= max_len {
+                on_max_len.emit(filtered_value);
+            }
         }
     };
 
@@ -74,6 +81,8 @@ pub struct LimitedTextInputProps {
     pub class: AttrValue,
     pub filter: Rc<LimitedInputFilter>,
     pub max_len: Option<usize>,
+    #[prop_or_else(|| Callback::noop())]
+    pub on_max_len: Callback<String>,
 }
 
 impl PartialEq for LimitedTextInputProps {
@@ -90,9 +99,10 @@ pub fn LimitedTextInput(props: &LimitedTextInputProps) -> Html {
     let class = &props.class;
     let filter = props.filter.clone();
     let max_len = props.max_len;
+    let on_max_len = props.on_max_len.clone();
 
     html! {
-        <LimitedInput {input_type} {class} {filter} {max_len} />
+        <LimitedInput {input_type} {class} {filter} {max_len} {on_max_len} />
     }
 }
 
@@ -101,6 +111,8 @@ pub struct LimitedNumericInputProps {
     #[prop_or_default]
     pub class: AttrValue,
     pub max_len: Option<usize>,
+    #[prop_or_else(|| Callback::noop())]
+    pub on_max_len: Callback<String>,
 }
 
 #[function_component]
@@ -108,8 +120,9 @@ pub fn LimitedNumericInput(props: &LimitedNumericInputProps) -> Html {
     let class = &props.class;
     let filter = Rc::new(|c: &char| c.is_ascii_digit()) as Rc<LimitedInputFilter>;
     let max_len = props.max_len;
+    let on_max_len = props.on_max_len.clone();
 
     html! {
-        <LimitedTextInput {class} {filter} {max_len} />
+        <LimitedTextInput {class} {filter} {max_len} {on_max_len} />
     }
 }
