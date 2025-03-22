@@ -3,6 +3,9 @@ name = "yew-limput"
 version = "0.1.0"
 edition = "2024"
 authors = ["Sean Bruton <sean@seanbruton.dev>"]
+description = "A yew component that provides an html input with real-time value filtering"
+license = "MIT OR Apache-2.0"
+categories = ["gui", "web-programming", "wasm"]
 
 [dependencies]
 tracing = "0.1.41"
