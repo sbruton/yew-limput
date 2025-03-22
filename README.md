@@ -4,8 +4,9 @@
 
 __General Text Input Constraints__
 ```rust
+use std::rc::Rc;
 use yew::prelude::*;
-use yew_limput::LimitedTextInput;
+use yew_limput::{LimitedInputFilter, LimitedTextInput};
 
 #[function_component]
 fn Example() -> Html {
@@ -19,6 +20,7 @@ __TOTP Code Input__
 `LimitedNumericInput` is the same as using `LimitedTextInput` with the filter `|c: &char| c.is_ascii_digit()`
 
 ```rust
+use std::rc::Rc;
 use yew::prelude::*;
 use yew_limput::LimitedNumericInput;
 
