@@ -88,3 +88,22 @@ pub fn LimitedTextInput(props: &LimitedTextInputProps) -> Html {
         <LimitedInput {input_type} {class} {filter} {max_len} />
     }
 }
+
+#[derive(PartialEq, Properties)]
+pub struct LimitedNumericInputProps {
+    #[prop_or_default]
+    pub class: AttrValue,
+    pub max_len: Option<usize>,
+}
+
+#[function_component]
+pub fn LimitedNumericInput(props: &LimitedNumericInputProps) -> Html {
+    let input_type = "text";
+    let class = &props.class;
+    let filter = Rc::new(|c: &char| c.is_ascii_digit()) as Rc<LimitedInputFilter>;
+    let max_len = props.max_len;
+
+    html! {
+        <LimitedInput {input_type} {class} {filter} {max_len} />
+    }
+}
