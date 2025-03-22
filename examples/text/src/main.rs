@@ -15,7 +15,7 @@ fn Example() -> Html {
 
     html! {
         <div>
-            <h1>{ "Limited Text Input Example" }</h1>
+            <h1>{ "Uppercase-Only Input Example" }</h1>
             <LimitedTextInput {filter} {max_len} />
         </div>
     }
