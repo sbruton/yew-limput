@@ -9,7 +9,6 @@ fn main() {
 
 #[function_component]
 fn Example() -> Html {
-    let filter = Rc::new(|c: &char| c.is_ascii_digit()) as Rc<LimitedInputFilter>;
     let max_len = Some(6);
 
     html! {

@@ -1,5 +1,6 @@
 use std::rc::Rc;
 
+use tracing::error;
 use web_sys::HtmlInputElement;
 use web_sys::wasm_bindgen::JsCast;
 use yew::prelude::*;
@@ -30,9 +31,15 @@ fn LimitedInput(props: &LimitedInputProps) -> Html {
         let max_len = props.max_len;
         move |event: InputEvent| {
             let Some(target) = event.target() else {
+                error!("input event has no target");
                 return;
             };
-            let input = target.unchecked_into::<HtmlInputElement>();
+
+            let Ok(input) = target.dyn_into::<HtmlInputElement>() else {
+                error!("input event target is not an input element");
+                return;
+            };
+
             let value = input.value();
 
             let filtered_value: String = value
@@ -74,7 +81,7 @@ impl PartialEq for LimitedTextInputProps {
 pub fn LimitedTextInput(props: &LimitedTextInputProps) -> Html {
     let input_type = "text";
     let class = &props.class;
-    let filter = props.filter.clone();
+    let filter = Rc::new(|c: &char| c.is_ascii_digit()) as Rc<LimitedInputFilter>;
     let max_len = props.max_len;
 
     html! {
