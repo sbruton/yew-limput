@@ -81,7 +81,7 @@ impl PartialEq for LimitedTextInputProps {
 pub fn LimitedTextInput(props: &LimitedTextInputProps) -> Html {
     let input_type = "text";
     let class = &props.class;
-    let filter = Rc::new(|c: &char| c.is_ascii_digit()) as Rc<LimitedInputFilter>;
+    let filter = props.filter.clone();
     let max_len = props.max_len;
 
     html! {
