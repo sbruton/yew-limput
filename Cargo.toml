@@ -2,7 +2,7 @@
 name = "yew-limput"
 version = "0.1.0"
 edition = "2024"
-authors = ["Sean Bruton <sean@>"]
+authors = ["Sean Bruton <sean@seanbruton.dev>"]
 
 [dependencies]
 tracing = "0.1.41"
