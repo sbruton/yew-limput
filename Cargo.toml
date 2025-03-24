@@ -1,6 +1,6 @@
 [package]
 name = "yew-limput"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2024"
 authors = ["Sean Bruton <sean@seanbruton.dev>"]
 description = "A yew component that provides an html input with real-time value filtering"

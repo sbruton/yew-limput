@@ -26,6 +26,7 @@ struct LimitedInputProps {
     filter: Rc<LimitedInputFilter>,
     max_len: Option<usize>,
     on_max_len: Callback<String>,
+    on_code_change: Callback<String>,
 }
 
 impl PartialEq for LimitedInputProps {
@@ -44,6 +45,7 @@ fn LimitedInput(props: &LimitedInputProps) -> Html {
         let append_only = props.append_only;
         let max_len = props.max_len.unwrap_or(usize::MAX);
         let on_max_len = props.on_max_len.clone();
+        let on_code_change = props.on_code_change.clone();
 
         move |event: InputEvent| {
             let Some(target) = event.target() else {
@@ -73,10 +75,25 @@ fn LimitedInput(props: &LimitedInputProps) -> Html {
                 }
             }
 
+            on_code_change.emit(filtered_value.clone());
+
             if filtered_value.len() >= max_len {
                 on_max_len.emit(filtered_value);
             }
         }
+    };
+
+    let onkeydown = if props.append_only {
+        |event: KeyboardEvent| {
+            if matches!(
+                event.key().as_str(),
+                "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight"
+            ) {
+                event.prevent_default();
+            }
+        }
+    } else {
+        |_event: KeyboardEvent| {}
     };
 
     let input_ref = &props.input_ref;
@@ -93,6 +110,7 @@ fn LimitedInput(props: &LimitedInputProps) -> Html {
             type={props.input_type}
             class={&props.class}
             {oninput}
+            {onkeydown}
         />
     }
 }
@@ -114,6 +132,8 @@ pub struct LimitedTextInputProps {
     pub max_len: Option<usize>,
     #[prop_or_else(|| Callback::noop())]
     pub on_max_len: Callback<String>,
+    #[prop_or_else(|| Callback::noop())]
+    pub on_code_change: Callback<String>,
 }
 
 impl PartialEq for LimitedTextInputProps {
@@ -136,6 +156,7 @@ pub fn LimitedTextInput(props: &LimitedTextInputProps) -> Html {
     let filter = props.filter.clone();
     let max_len = props.max_len;
     let on_max_len = props.on_max_len.clone();
+    let on_code_change = props.on_code_change.clone();
 
     html! {
         <LimitedInput
@@ -149,6 +170,7 @@ pub fn LimitedTextInput(props: &LimitedTextInputProps) -> Html {
             {filter}
             {max_len}
             {on_max_len}
+            {on_code_change}
         />
     }
 }
@@ -169,6 +191,8 @@ pub struct LimitedNumericInputProps {
     pub max_len: Option<usize>,
     #[prop_or_else(|| Callback::noop())]
     pub on_max_len: Callback<String>,
+    #[prop_or_else(|| Callback::noop())]
+    pub on_code_change: Callback<String>,
 }
 
 #[function_component]
@@ -179,9 +203,10 @@ pub fn LimitedNumericInput(props: &LimitedNumericInputProps) -> Html {
     let name = &props.name;
     let autocomplete = props.autocomplete;
     let append_only = props.append_only;
-    let filter = Rc::new(|c: &char| c.is_ascii_digit()) as Rc<LimitedInputFilter>;
+    let filter = input_filter!(|c: &char| c.is_ascii_digit());
     let max_len = props.max_len;
     let on_max_len = props.on_max_len.clone();
+    let on_code_change = props.on_code_change.clone();
 
     html! {
         <LimitedTextInput
@@ -194,6 +219,7 @@ pub fn LimitedNumericInput(props: &LimitedNumericInputProps) -> Html {
             {filter}
             {max_len}
             {on_max_len}
+            {on_code_change}
             />
     }
 }
